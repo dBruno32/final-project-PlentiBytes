@@ -1,0 +1,79 @@
+<!--
+    https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_todo
+-->
+<h1>Add a Daily Goal | PlentiBytes</h1>
+
+<div class="middle-card-container">
+    <h3 class="centered-title">Click on one of the modules below to enter that category to your schedule.</h3>
+    <h3 class="centered-title"> Make sure to commit your goals to the schedule by clicking the commit button below</h3>
+    <br>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border orange-back" onclick="openGoalModal(0);"><p>Calories</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border yellow-back" onclick="openGoalModal(1);"><p>Carbohydrates</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border dark-blue-back" onclick="openGoalModal(2);"><p>Fats</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border green-back" onclick="openGoalModal(3);"><p>Fiber</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border purple-back" onclick="openGoalModal(4);"><p>Proteins</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border red-back" onclick="openGoalModal(5);"><p>Sugar</p></div>
+    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border blue-back" onclick="openGoalModal(6);"><p>Water</p></div>
+</div>
+
+<div class="middle-card-container">
+    <h1>Current goals pending commitment</h1>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+        <form action="">
+            <input type="submit" value="Submit">
+        </form>
+</div>
+
+<div class="center-modal middle-card-container hidden black-back">
+    <div class="goal-modal-content white-back minimally-padded-bottom">
+        <span class="close">&times;</span>
+        <h1 class="centered-title" id="goal-modal-title">...</h1>
+
+        <form action="" class="middle-card-container">
+            <label for="goal-day">Goal:</label>
+            <select name="goal-day" id="goal-day">
+                <div class="">
+                    <option value="sunday">Sunday</option>
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                    <option value="saturday">Saturday</option>
+                </div>
+            </select>
+            <br>
+
+            <label for="amountOfGoal">Amount:</label>
+                <input type="text">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+
+        
+<script>
+
+    function openGoalModal(indexIn) {
+        let modal = document.querySelector('.center-modal');
+        let title = document.querySelector('#goal-modal-title');
+        let category = document.querySelectorAll('.inline-scroll-item')[indexIn];
+
+        title.innerHTML = "";
+        let s = category.innerHTML;
+        title.innerHTML += s;
+        modal.style.display = "block";
+    }
+</script>

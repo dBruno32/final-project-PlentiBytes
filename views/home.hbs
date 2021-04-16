@@ -1,0 +1,61 @@
+<h1>Welcome to PlentiBytes</h1>
+
+<div class="middle-card-container light-gray-back" id="main-container-home">
+    <div class="fifty-fifty-split-grid">
+        <div class="fifty-left-split-grid">
+            <div class="middle-card-container white-back">
+                <h2 class="centered-title">Progress</h2>
+                <br>
+                <p>You Started on: {{ startDate }}</p>
+                <p id="TODAY">Today is: </p>
+                <br><br>
+                <h3 class="centered-title">Here are your Achievments:</h3>
+
+                <div class="inline-scroll middle-card-container">
+                    <div class="test">
+                        <div class="inline-scroll-item quarter-constant-width-constraints">
+                            <h5>Fresh Start</h5>
+                        </div>
+                        <div class="inline-scroll-item quarter-constant-width-constraints">
+                            <h5>Over-Achiever</h5>
+                        </div>
+                        <div class="inline-scroll-item quarter-constant-width-constraints">
+                            <h5>test</h5>
+                        </div>
+                        <div class="inline-scroll-item quarter-constant-width-constraints">
+                            <h5>test2</h5>
+                        </div>
+                        <div class="inline-scroll-item quarter-constant-width-constraints">
+                            <h5>test3</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fifty-right-split-grid">
+            <div class="middle-card-container white-back circle-border">
+                <h2 class="centered-title">Profile</h2>
+                <div class="middle-card-container less-narrow-margins">
+                    <p class="centered-title">Name: {{ name }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="middle-card-container white-back">
+        <h3 class="centered-title">Get Started</h3>
+        <div class="middle-card-container centered-title">
+            <a href="/schedule/create-new">Create New Nutritional Schedule</a>
+            <br>
+            <a href="/schedule/review">Review Your Nutritional Schedules</a>
+            <br>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var TODAY = document.getElementById('TODAY');
+        TODAY.innerHTML += new Date().toDateString();
+    }
+</script>

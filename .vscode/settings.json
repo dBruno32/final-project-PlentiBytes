@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/dac558ab-4bf5-4b99-98ed-ed8344f32eff/resourceGroups/plentibytes/providers/Microsoft.Web/sites/plentibytes",
+    "appService.deploySubpath": "."
+}
