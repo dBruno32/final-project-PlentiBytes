@@ -1,6 +1,8 @@
 <!--
     https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_todo
 -->
+
+
 <h1>Add a Daily Goal | PlentiBytes</h1>
 
 <div class="middle-card-container">
@@ -37,7 +39,7 @@
 
 <div class="center-modal middle-card-container hidden black-back">
     <div class="goal-modal-content white-back minimally-padded-bottom">
-        <span class="close">&times;</span>
+        <span class="close" onclick="closeCategoryModal();">&times;</span>
         <h1 class="centered-title" id="goal-modal-title">...</h1>
 
         <form action="" class="middle-card-container">
@@ -65,13 +67,19 @@
 
         
 <script>
+    // TODO: Modularize with Objects / Classes
 
+    function closeCategoryModal() {
+        document.querySelector('.center-modal').style.display = 'none';
+    }
+
+    // Open the HTML Modal of category w/ appropriate index
     function openGoalModal(indexIn) {
         let modal = document.querySelector('.center-modal');
         let title = document.querySelector('#goal-modal-title');
         let category = document.querySelectorAll('.inline-scroll-item')[indexIn];
-
         title.innerHTML = "";
+
         let s = category.innerHTML;
         title.innerHTML += s;
         modal.style.display = "block";
