@@ -8,9 +8,9 @@ const express = require('express');
 const session = require('express-session');
 const handlebars = require('express-handlebars');
 const path = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
-
-require('./utils/passport')(passport);
 
 //  DB work
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -44,8 +44,8 @@ app.use(session({
         db: db,
         table: 'sessions'
     }),
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
   }));
   
   app.use(passport.initialize());

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 
 // TEMP - For pages not yet set up
@@ -21,31 +22,45 @@ router.get('/',  (req,res) => {
 });
 
 // HOME / Dashboard
-router.get('/home',  (req,res) => {
-    res.render('home', {
-        name: req.user.displayName,
-        startDate: new Date(req.user.createdAt).toDateString()
-    });
+router.get('/home', (req,res) => {
+    console.log(req.isAuthenticated());
+    if(req.session.authorizedUser) {
+        const user = req.session.authorizedUser;
+
+        res.render('home', {
+            name: user.displayName,
+            startDate: new Date(user.createdAt).toDateString()
+        });
+    }
 });
 
+
 // Schedule/Create New
-router.get('/schedule/create-new', (req, res) => {
-    res.render('schedule/create-new');
+router.get('/schedule/create-new',  (req, res) => {
+    if(req.session.authorizedUser) {
+        res.render('schedule/create-new');
+    }
 });
 
 // Schedule/Review
 router.get('/schedule/review',  (req, res) => {
-    res.render('schedule/review');
+    if(req.session.authorizedUser) {
+        res.render('schedule/review');
+    }
 });
 
 // Schedule/goals/weekly
 router.get('/schedule/goals/weekly',  (req, res) => {
-    res.render('schedule/goals/weekly');
+    if(req.session.authorizedUser) {
+        res.render('schedule/goals/weekly');
+    }
 });
 
 // Schedule/goals/daily
 router.get('/schedule/goals/daily', (req, res) => {
-    res.render('schedule/goals/daily');
+    if(req.session.authorizedUser) {
+        res.render('schedule/goals/daily');
+    }
 });
 
 module.exports = router;
