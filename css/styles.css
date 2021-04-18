@@ -46,7 +46,7 @@
 .center-modal {
     z-index: 4;
     position: fixed;
-    left: 0;
+    left: 25%;
     top: 0;
 }
 
@@ -221,6 +221,10 @@
 .hover-click:hover {
     cursor: pointer;
     background-color: #ffffff;
+}
+
+.close:hover {
+    cursor: pointer;
 }
 
 
