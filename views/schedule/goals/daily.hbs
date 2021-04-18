@@ -16,12 +16,15 @@
 
 <div class="middle-card-container">
     <h1>Current goals pending commitment</h1>
-    <form action=""></form>
-        <ul id="commitments-list">
+    <ul id="commitments-list-items">
 
-        </ul>
+    </ul>
+    <form action="/schedule/goals/daily" method="post">
+        <div id="commitments-list">
+
+        </div>
         <input type="submit" value="Submit">
-        </form>
+    </form>
 </div>
 
 <div class="center-modal middle-card-container hidden black-back">
@@ -55,6 +58,7 @@
         
 <script>
     // TODO: Modularize with Objects / Classes
+    let i = 0;
 
     function closeCategoryModal() {
         document.querySelector('.center-modal').style.display = 'none';
@@ -73,13 +77,20 @@
     }
 
     function pushToCommitments() {
+        i++;
         let amount = document.querySelector('#goal-amount').value; 
-        let type = document.querySelector('#goal-modal-title').innerHTML;
+        let type = document.querySelector('#goal-modal-title').childNodes[0].innerHTML;
         let day = document.querySelector('#goal-day').value; 
-        let list = document.querySelector('#commitments-list');
+        let list = document.querySelector('#commitments-list-items');
+        let commits = document.querySelector('#commitments-list');
 
-        let commitment = document.createElement('li');
-        commitment.innerHTML = day + " Goal: " + amount + "g " + type.trim();
-        list.appendChild(commitment);
+        let listItem = document.createElement('li');
+        let commitment = document.createElement('input');
+        commitment.type = "hidden"
+        commitment.name = 'pending-commitment' + i;
+        commitment.value = day + " Goal: " + amount + "g " + type;
+        listItem.innerHTML = day + " Goal: " + amount + "g " + type;
+        commits.appendChild(commitment);
+        list.appendChild(listItem);
     }
 </script>

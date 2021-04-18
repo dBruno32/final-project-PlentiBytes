@@ -12,13 +12,12 @@ const sequelize = require('../utils/db');
   };
  
   const Session = sequelize.define('sessions', mapping, {
-    indexes: [
-      {
-        name: 'session_sid_index',
-        method: 'BTREE',
-        fields: ['sid']
-      },
-    ],
+    sid: {
+      type: Sequelize.STRING,
+      primaryKey: true,
+    },
+    expires: Sequelize.DATE,
+    data: Sequelize.STRING(50000),
   });
  
   exports.getMapping = () => mapping;

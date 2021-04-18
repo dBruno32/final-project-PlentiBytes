@@ -31,13 +31,14 @@ app.set('view engine', 'hbs');
 
 //  Static Files @ Local DIR - 'src'
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 //  Allows server to indicate other origins
 app.use(cors());
 
-// Passport Authentication & Session Middleware
+//  Session Middleware + link to passport
 app.use(session({
     secret: passKey,
     store: new SequelizeStore({ 
@@ -47,13 +48,13 @@ app.use(session({
     resave: false,
     saveUninitialized: false
   }));
-  
-  app.use(passport.initialize());
-  app.use(passport.session());
 
-
+app.use(passport.initialize());
+app.use(passport.session());
+ 
 app.use('/', require('./routes/index.js'));
 app.use('/auth', require('./routes/auth.js'));
+
 
 app.listen(port, (req, res) => {
     console.log(`App running on server: ${port}`);
