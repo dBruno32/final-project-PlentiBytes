@@ -45,10 +45,14 @@
     <div class="middle-card-container white-back">
         <h3 class="centered-title">Get Started</h3>
         <div class="middle-card-container centered-title">
-            <a href="/schedule/create-new">Create New Nutritional Schedule</a>
+            <a href="/review-all-schedules">Review Your Nutritional Schedules</a>
             <br>
-            <a href="/schedule/review">Review Your Nutritional Schedules</a>
+            <a href="/foods">Review Your Foods</a>
             <br>
+            <form action="/schedule/create-new" method="post">
+                <input type="text" name="scheduleTitle" required>
+                <button type="submit">Create New Nutritional Schedule</button>
+            </form>
         </div>
     </div>
 </div>

@@ -1,0 +1,11 @@
+<h1>Here are you Nutrtional Schedules: </h1>
+
+<div class="middle-card-container">
+    {{#if schedules}}
+        {{#each schedules}}
+            <div class="inline-scroll-item">
+                <a href="/schedule/review/{{this.dataValues.id}}">{{this.dataValues.title}}</a>
+            </div>
+        {{/each}}
+    {{/if}}
+</div>

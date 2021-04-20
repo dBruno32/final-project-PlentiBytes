@@ -12,14 +12,14 @@ const Goal = db.define('goal', {
         primaryKey: true,
         type: Sequelize.INTEGER
     },
-    goalType: {
-        type: Sequelize.STRING
-    },
     goalAmount: {
         type: Sequelize.INTEGER
     },
+    goalType: {
+        type: Sequelize.STRING 
+    },
     day: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     schedule: {                 // Pending: 'schedule' : schedule ID
         type: Sequelize.INTEGER
@@ -34,7 +34,7 @@ const Goal = db.define('goal', {
 });
 
 Goal.sync().then(() => {
-    console.log(`Goals table updated....`);
+    console.log(`goals table updated....`);
 });
 
 module.exports = Goal;

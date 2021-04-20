@@ -2,6 +2,8 @@
 <h1>Add a Daily Goal | PlentiBytes</h1>
 
 <div class="middle-card-container">
+    <h1 class="centered-title">Set some goals</h1>
+    <br>
     <h3 class="centered-title">Click on one of the modules below to enter that category to your schedule.</h3>
     <h3 class="centered-title"> Make sure to commit your goals to the schedule by clicking the commit button below</h3>
     <br>
@@ -11,15 +13,19 @@
     <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border green-back" onclick="openGoalModal(3);"><p>Fiber</p></div>
     <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border purple-back" onclick="openGoalModal(4);"><p>Proteins</p></div>
     <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border red-back" onclick="openGoalModal(5);"><p>Sugar</p></div>
-    <div class="inline-scroll-item hover-click quarter-constant-constraints dashed-border blue-back" onclick="openGoalModal(6);"><p>Water</p></div>
 </div>
 
-<div class="middle-card-container">
+<div class="middle-card-container centered-title">
     <h1>Current goals pending commitment</h1>
-    <ul id="commitments-list-items">
+    <br>
+    <h3 class="centered-title">Make sure to submit your commitments before moving on in the site.</h3>
+    <div class="middle-card-container">
+        <ul id="commitments-list-items">
 
-    </ul>
-    <form action="/schedule/goals/daily" method="post">
+        </ul>
+    </div>
+
+    <form action="/schedule/{{scheduleID}}/goals/daily" method="post">
         <div id="commitments-list">
 
         </div>
@@ -35,20 +41,18 @@
         <form action="" class="middle-card-container">
             <label for="goal-day">Goal:</label>
             <select name="goal-day" id="goal-day">
-                <div class="">
-                    <option value="Sunday">Sunday</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                </div>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
             </select>
             <br>
 
             <label for="amountOfGoal">Amount:</label>
-                <input type="text" id="goal-amount">
+                <input type="text" id="goal-amount" required>
             <br>
             <input type="button" onclick="pushToCommitments();" value="Submit">
         </form>
@@ -58,6 +62,9 @@
         
 <script>
     // TODO: Modularize with Objects / Classes
+    // TODO: Add numbe rinput validation on pre-post FORM
+
+
     let i = 0;
 
     function closeCategoryModal() {
@@ -85,12 +92,30 @@
         let commits = document.querySelector('#commitments-list');
 
         let listItem = document.createElement('li');
-        let commitment = document.createElement('input');
-        commitment.type = "hidden"
-        commitment.name = 'pending-commitment' + i;
-        commitment.value = day + " Goal: " + amount + "g " + type;
-        listItem.innerHTML = day + " Goal: " + amount + "g " + type;
-        commits.appendChild(commitment);
+        listItem.style.listStyle = 'inside';
+        
+        // Day
+        let commitmentDay = document.createElement('input');
+        commitmentDay.type = "hidden"
+        commitmentDay.name = 'day' + i;
+        commitmentDay.value = day ;
+        
+        // Amount
+        let commitmentAmount = document.createElement('input');
+        commitmentAmount.type = "hidden"
+        commitmentAmount.name = 'amount' + i;
+        commitmentAmount.value = amount ;
+
+        // Food
+        let commitmentType = document.createElement('input');
+        commitmentType.type = "hidden"
+        commitmentType.name = 'type' + i;
+        commitmentType.value = type ;
+
+        listItem.innerHTML = day + " Goal: " + amount + " " + type;
+        commits.appendChild(commitmentDay);
+        commits.appendChild(commitmentAmount);
+        commits.appendChild(commitmentType);
         list.appendChild(listItem);
     }
 </script>

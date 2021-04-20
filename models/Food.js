@@ -6,22 +6,34 @@ const Sequelize = require('sequelize');
 const db = require('../utils/db');
 
 
-const Entry = db.define('entry', {
+const Goal = db.define('food', {
     id: {
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
     },
-    food: {
+    goalType: {
         type: Sequelize.STRING
     },
-    entryAmount: {
+    servingSize: {
         type: Sequelize.INTEGER
     },
-    day: {
+    servingCalorie: {
         type: Sequelize.INTEGER
     },
-    schedule: {                 // Pending: 'schedule' : schedule ID
+    servingCarbohydrate: {                
+        type: Sequelize.INTEGER
+    },
+    servingFat: {                
+        type: Sequelize.INTEGER
+    },
+    servingFiber: {                
+        type: Sequelize.INTEGER
+    },
+    servingProtein: {                
+        type: Sequelize.INTEGER
+    },
+    servingSugar: {                
         type: Sequelize.INTEGER
     },
     createdAt: {
@@ -33,8 +45,8 @@ const Entry = db.define('entry', {
     }
 });
 
-Entry.sync().then(() => {
-    console.log(`Entries table updated....`);
+Goal.sync().then(() => {
+    console.log(`Goals table updated....`);
 });
 
-module.exports = Entry;
+module.exports = Goal;

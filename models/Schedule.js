@@ -12,6 +12,9 @@ const Schedule = db.define('schedule', {
         primaryKey: true,
         type: Sequelize.INTEGER
     },
+    title: {
+        type: Sequelize.STRING
+    },
     owner: {
         type: Sequelize.INTEGER
     },
@@ -28,4 +31,4 @@ Schedule.sync().then(() => {
     console.log(`Schedules table updated....`);
 });
 
-module.exports = Schdule;
+module.exports = Schedule;

@@ -1,5 +1,3 @@
-// pending keep 
-
 class Goal {
     constructor(dayIn, typeIn, amountIn) {
         this.day = dayIn;

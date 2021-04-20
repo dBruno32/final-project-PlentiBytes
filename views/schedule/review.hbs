@@ -1,37 +1,80 @@
-<h1>Your Nutritional Schedule | PlentiBytes</h1>
+<h1>Current Nutritional Schedule | PlentiBytes</h1>
 
 <div class="middle-card-container">
     <div class="fifty-fifty-split-grid">
         <div class="fifty-left-split-grid">
             <div class="schedule-day-box">
                 <h1>Sunday</h1>
+                {{#if sundayGoals}}
+                    {{#each sundayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Monday</h1>
+                {{#if mondayGoals}}
+                    {{#each mondayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div> 
             <div class="schedule-day-box">
                 <h1>Tuesday</h1>
+                {{#if tuesdayGoals}}
+                    {{#each tuesdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Wednesday</h1>
+                {{#if wednesdayGoals}}
+                    {{#each wednesdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Thursday</h1>
+                {{#if thursdayGoals}}
+                    {{#each thursdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Friday</h1>
+                {{#if fridayGoals}}
+                    {{#each fridayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>     
             <div class="schedule-day-box">
                 <h1>Saturday</h1>
+                {{#if saturdayGoals}}
+                    {{#each saturdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>         
         </div>
         <div class="fifty-right-split-grid">
-            <div class="middle-card-container">
-                <h2 class="centered-title">Your Goals:</h2>
+            <div class="middle-card-container centered-title">
+                <h2 class="">Add some goals:</h2>
+                <a href="/schedule/{{scheduleID}}/goals/weekly" class="clickable-link-as-button">Add a weekly goal</a>
+                <br>
+                <a href="/schedule/{{scheduleID}}/goals/daily" class="clickable-link-as-button">Add a daily goal</a>
             </div>
-            <div class="middle-card-container">
-                <h2 class="centered-title">Completed Goals:</h2>
+            <div class="middle-card-container centered-title">
+                <h2 class="">Completed Goals:</h2>
             </div>
+            <div class="middle-card-container centered-title">
+                <h2 class="">Add an Entry:</h2>
+                <a href="/errors/temp" class="clickable-link-as-button">Add an entry</a>
+            </div>
+
         </div>
     </div>
 </div>
