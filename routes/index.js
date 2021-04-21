@@ -70,7 +70,8 @@ router.get('/foods', async (req, res) => {
             const protein = food.servingProtein;
             const sugar = food.servingSugar;
             
-            const totalGram = food.servingCarbohydrate + food.servingFat + food.servingProtein;
+//            const totalGram = food.servingCarbohydrate + food.servingFat + food.servingProtein;
+            const totalGram = food.servingSize;
             
             // Rank big 3 (C/F/P)
             // TODO: Helper functions and helper class - messsy
