@@ -5,6 +5,7 @@ const router = express.Router();
 const passport = require('passport');
 
 const Goal = require('../models/Goal');
+const Food = require('../models/Food');
 const Schedule = require('../models/Schedule');
 
 
@@ -28,7 +29,6 @@ router.get('/', (req,res) => {
 
 // HOME / Dashboard
 router.get('/home', (req, res) => {
-    console.log(req.isAuthenticated());
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
 
@@ -40,20 +40,81 @@ router.get('/home', (req, res) => {
 });
 
 // View Foods
-router.get('/foods', (req, res) => {
-    console.log(req.isAuthenticated());
+router.get('/foods', async (req, res) => {
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
+    
+        // *TODO* []: !!!!FORM VALIDATIONS!!!!
+        // TODO [X]: QUery all user's (by ID) foods
+        // TODO [X-Needs More Testing]: Categorize foods by their values    
+        // TODO [X]: Parse into separate arrays
+        // TODO [X]: render out as li elements in appropriate divs on .HBS page
+
+        const allUsersFoods = await Food.findAll({ where: {owner: req.user.id} });
+
+        const carbohydrateDenseFoods = [];
+        const fiberDenseFoods = [];
+        const fatDenseFoods = [];
+        const proteinDenseFoods = [];
+        const sugarDenseFoods = [];
+
+        // Sum up total grams carb + fat + protein
+        // Find prio (Carb / Fat / Protein) /3??
+        // If CARB -> sum up total grams sugar + fiber  + (Carb - (sugar+fiber))
+        // FInd prio (Carb / sugar / fiber)
+
+        allUsersFoods.forEach(food => {
+            const carb = food.servingCarbohydrate;
+            const fat = food.servingFat;
+            const fiber = food.servingFiber;
+            const protein = food.servingProtein;
+            const sugar = food.servingSugar;
+            
+            const totalGram = food.servingCarbohydrate + food.servingFat + food.servingProtein;
+            
+            // Rank big 3 (C/F/P)
+            // TODO: Helper functions and helper class - messsy
+            if(((carb / totalGram) > (fat/totalGram)) && ((carb/totalGram) > (protein/totalGram))) {
+                // PRIO - Carbs
+                // Rank Carb v Fiber v Sugar
+                const carbDifference = carb - (fiber + sugar);  // helper var
+
+                if(((fiber / carb) > (sugar/carb)) && ((fiber / carb) > (carbDifference / carb)) ) {
+                // PRIO - Fiber
+                    fiberDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+
+                } else if(((sugar / carb) > (fiber/carb)) && ((sugar / carb) > (carbDifference / carb))) {
+                // PRIO - Sugar
+                    sugarDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+
+                } else if(((carbDifference / carb) > (fiber/carb)) && ((carbDifference / carb) > (sugar / carb))) {
+                // PRIO - Carb
+                    carbohydrateDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+                }
+
+            } else if(((fat / totalGram) > (carb/totalGram)) && ((fat/totalGram) > (protein/totalGram))) {
+                // PRIO - Fats
+                fatDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+
+            } else if(((protein / totalGram) > (fat/totalGram)) && ((protein/totalGram) > (carb/totalGram))) {
+                // PRIO - Protein
+                proteinDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+            }
+        });
 
         res.render('foods/view', {
-            name: user.displayName
+            name: user.displayName,
+            carbohydrates: carbohydrateDenseFoods,
+            fibers: fiberDenseFoods,
+            fats: fatDenseFoods,
+            proteins: proteinDenseFoods,
+            sugars: sugarDenseFoods
         });
     }
 });
 
 // Add a Food | render / GET
-router.get('/foods/add', (req, res) => {
-    console.log(req.isAuthenticated());
+router.get('/foods/add', (req, res) => {  
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
 
@@ -64,14 +125,38 @@ router.get('/foods/add', (req, res) => {
 });
 
 // Add a Food | POST + add to DB
-router.post('/foods/add', (req, res) => {
-    console.log(req.isAuthenticated());
+router.post('/foods/add', async (req, res) => {
+    
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
+        console.log("US", req.user.id);
 
-        res.render('foods/view', {
-            name: user.displayName
+        const {
+            foodDescription,
+            servingSize,
+            calorieServing,
+            carbohydrateServing,
+            fatServing,
+            fiberServing,
+            proteinServing,
+            sugarServing
+        } = req.body;
+
+        const food = new Food({
+            owner: req.user.id,
+            description: foodDescription,
+            servingSize: servingSize,
+            servingCalorie: calorieServing,
+            servingCarbohydrate: carbohydrateServing,
+            servingFat: fatServing,
+            servingFiber: fiberServing,
+            servingProtein: proteinServing,
+            servingSugar: sugarServing
         });
+
+        await food.save();
+
+        res.redirect('/foods');
     }
 });
 
@@ -103,14 +188,14 @@ router.get('/review-all-schedules', async (req, res) => {
 
         // TODO [X]: Query all schedules w/ user id
         // TODO [X]: Render all schedules to client
-        // TODO []: inline-block card-container
-        // TODO []: clicking card -> results in schedule/view/ | schedule ID |...
+        // TODO [X]: inline-block card-container
+        // TODO [X]: clicking card -> results in schedule/view/ | schedule ID |...
 
         const schedules = await Schedule.findAll({where: {owner: req.user.id} });
         const titles = [];
         const schedulesIDs = [];
 
-// TODO (MAYBE?)[] : Create Model w/ title and scheudleIDS rather than ORM model pass
+// TODO (MAYBE?)[] : Create Object w/ title and scheudleIDS rather than ORM model pass
 
 /*       
         schedules.forEach(schedule => {
@@ -210,7 +295,7 @@ router.get('/schedule/:id/goals/daily', (req, res) => {
 // [X] TODO: SERVER | Code to grab list items and iterate through to create new database goal rows
 // [X] TODO: SERVR | Save new entries on "commit"
 
-// *[]* REMEMBER: CLEAR OUT goals table before working scheule DB
+// *[-]* REMEMBER: CLEAR OUT goals table before working scheule DB
 router.post('/schedule/:id/goals/daily', async (req, res) => {
     if(req.session.authorizedUser) {
 

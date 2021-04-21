@@ -11,24 +11,49 @@
 
         <div class="forty-middle-split-grid middle-card-container">
             <h3>Carbohydrate-Dense Foods:</h3>
+            {{#if carbohydrates}}
+                {{#each carbohydrates}}
+                    <li>{{this}}</li>
+                {{/each}}
+            {{/if}}
         </div>
 
         <div class="thirty-left-split-grid middle-card-container">
             <h3>Fiber-Dense Foods:</h3>
+            {{#if fibers}}
+                {{#each fibers}}
+                    <li>{{this}}</li>
+                {{/each}}
+            {{/if}}
         </div>
     </div>
 
     <div class="thirty-forty-thirty-split-grid">
         <div class="thirty-left-split-grid middle-card-container">
             <h3>Fat-Dense Foods:</h3>
+            {{#if fats}}
+                {{#each fats}}
+                    <li>{{this}}</li>
+                {{/each}}
+            {{/if}}
         </div>
         
         <div class="forty-middle-split-grid middle-card-container">
             <h3>Protein-Dense Foods:</h3>
+            {{#if proteins}}
+                {{#each proteins}}
+                    <li>{{this}}</li>
+                {{/each}}
+            {{/if}}
         </div>
 
         <div class="thirty-left-split-grid middle-card-container">
             <h3>Sugar-Dense Foods:</h3>
+            {{#if sugars}}
+                {{#each sugars}}
+                    <li>{{this}}</li>
+                {{/each}}
+            {{/if}}
         </div>
     </div>
 </div>

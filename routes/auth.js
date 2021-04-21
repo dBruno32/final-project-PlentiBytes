@@ -23,18 +23,18 @@ router.post('/login', async (req, res) => {
         // Password Authentication
         if(await bcrypt.compare(password, existingUser.password)) {
           
-            // Authorize User to the Session & Pass User details
+            // Authorize User to the Session & Pass User details if req.user not accessible
             req.session.authorizedUser = {
                 auth: true,
                 displayName: existingUser.displayName,
                 createdAt: existingUser.createdAt
             }
-
             const userID = existingUser.id;
-            // Passport function call 
+            // Passport function call to login the user // assigns user to req.user
             req.login(existingUser, function(err) {
+                console.log(req.session);
                 if(err) {
-                    console.log("UT OH");
+                    console.log("Not Authorized");
                 }
             });
 
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Initialiaze Persistance of Session
+// Initialiaze Persistance of Session | encoding & decoding
 passport.serializeUser(function(userID, done) {
     done(null, userID);
 });
