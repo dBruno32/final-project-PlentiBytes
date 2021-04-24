@@ -19,9 +19,9 @@ const Entry = db.define('entry', {
         type: Sequelize.INTEGER
     },
     day: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
-    schedule: {                 // Pending: 'schedule' : schedule ID
+    schedule: {                 
         type: Sequelize.INTEGER
     },
     createdAt: {
@@ -34,7 +34,7 @@ const Entry = db.define('entry', {
 });
 
 Entry.sync().then(() => {
-    console.log(`Entries table updated....`);
+    console.log(`entries table updated....`);
 });
 
 module.exports = Entry;

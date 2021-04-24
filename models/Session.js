@@ -11,15 +11,6 @@ const sequelize = require('../utils/db');
     data: Sequelize.STRING(50000),
   };
  
-  const Session = sequelize.define('sessions', mapping, {
-    sid: {
-      type: Sequelize.STRING,
-      primaryKey: true,
-    },
-    expires: Sequelize.DATE,
-    data: Sequelize.STRING(50000),
-  });
+  const Session = sequelize.define('sessions', mapping);
  
-  exports.getMapping = () => mapping;
- 
-  exports.getModel = () => Session;
+  module.exports = Session;

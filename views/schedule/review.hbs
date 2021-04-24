@@ -10,11 +10,21 @@
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
+                {{#if sundayEntries}}
+                    {{#each sundayEntries}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}                
             </div>  
             <div class="schedule-day-box">
                 <h1>Monday</h1>
                 {{#if mondayGoals}}
                     {{#each mondayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
+                {{#if mondayEntries}}
+                    {{#each mondayEntries}}
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
@@ -26,11 +36,21 @@
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
+                {{#if tuesdayEntries}}
+                    {{#each tuesdayEntries}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Wednesday</h1>
                 {{#if wednesdayGoals}}
                     {{#each wednesdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
+                {{#if wednesdayEntries}}
+                    {{#each wednesdayEntries}}
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
@@ -42,6 +62,11 @@
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
+                {{#if thursdayEntries}}
+                    {{#each thursdayEntries}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>  
             <div class="schedule-day-box">
                 <h1>Friday</h1>
@@ -50,11 +75,21 @@
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
+                {{#if fridayEntries}}
+                    {{#each fridayEntries}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
             </div>     
             <div class="schedule-day-box">
                 <h1>Saturday</h1>
                 {{#if saturdayGoals}}
                     {{#each saturdayGoals}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{/if}}
+                {{#if saturdayEntries}}
+                    {{#each saturdayEntries}}
                         <li>{{this}}</li>
                     {{/each}}
                 {{/if}}
@@ -72,7 +107,7 @@
             </div>
             <div class="middle-card-container centered-title">
                 <h2 class="">Add an Entry:</h2>
-                <a href="/errors/temp" class="clickable-link-as-button">Add an entry</a>
+                <a href="/schedule/{{scheduleID}}/entries" class="clickable-link-as-button">Add an entry</a>
             </div>
 
         </div>

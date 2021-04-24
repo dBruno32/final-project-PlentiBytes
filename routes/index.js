@@ -1,10 +1,27 @@
 // TODO: Modularize into separate router files
 
+/*
+    -TODO - FORM VALIDATIONS Refine | Updating:
+    --> goals: ensure amounts are numbers
+    ---> /schedule/goals/daily
+    ----> pre-post & post-post
+    -----> amount
+    
+    -->foods: ensure amounts are coherent numbers
+    ---> /foods/add
+    ----> individual amounts
+    ----> individual amounts not to exceed serving size
+
+    --> entries: ensure amountsare numbers
+    --->amount
+*/
+
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 
 const Goal = require('../models/Goal');
+const Entry = require('../models/Entry');
 const Food = require('../models/Food');
 const Schedule = require('../models/Schedule');
 
@@ -130,7 +147,6 @@ router.post('/foods/add', async (req, res) => {
     
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
-        console.log("US", req.user.id);
 
         const {
             foodDescription,
@@ -229,17 +245,26 @@ router.get('/schedule/review/:id',  async (req, res) => {
         const fridayGoals = [];
         const saturdayGoals = [];
 
+        const sundayEntries = [];
+        const mondayEntries = [];
+        const tuesdayEntries = [];
+        const wednesdayEntries = [];
+        const thursdayEntries = [];
+        const fridayEntries = [];
+        const saturdayEntries = [];
+
         // Parse instead of querying 7 XX
         const goals = await Goal.findAll({ where: {schedule: req.params.id } });
 
         // Generate String arrays to iterate & pass through to .HBS view
+        // String array for ea day's goals based on return
         if(goals) {
             goals.forEach(goal => {
                 if(goal.day.localeCompare("Sunday") == 0) {
                     sundayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
                 } 
                 if(goal.day.localeCompare("Monday") == 0) {
-                    mondayoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    mondayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
                 }
                 if(goal.day.localeCompare("Tuesday") == 0) {
                     tuesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
@@ -259,16 +284,57 @@ router.get('/schedule/review/:id',  async (req, res) => {
             }); 
         }
 
+        const entries = await Entry.findAll({ where: {schedule: req.params.id } });
+        
+        // TODO [X]: QUery for all rows of goals per Day 
+        // TODO [X]: send to render on screen as li items in appropriate divs
+        if(entries) {
+            entries.forEach(entry => {
+                let foodString = entry.food.substring(0, entry.food.length - 1);
+
+                if(entry.day.localeCompare("Sunday") == 0) {
+                    sundayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                } 
+                if(entry.day.localeCompare("Monday") == 0) {
+                    mondayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                }
+                if(entry.day.localeCompare("Tuesday") == 0) {
+                    tuesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                } 
+                if(entry.day.localeCompare("Wednesday") == 0) {
+                    wednesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                }
+                if(entry.day.localeCompare("Thursday") == 0) {
+                    thursdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                } 
+                if(entry.day.localeCompare("Friday") == 0) {
+                    fridayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                }
+                if(entry.day.localeCompare("Saturday") == 0) {
+                    saturdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                }
+            });
+        }
+
 
         res.render('schedule/review', {
             scheduleID: req.params.id,
+            // Goals
             sundayGoals,
             mondayGoals,
             tuesdayGoals,
             wednesdayGoals,
             thursdayGoals,
             fridayGoals,
-            saturdayGoals
+            saturdayGoals,
+            // Entries
+            sundayEntries,
+            mondayEntries,
+            tuesdayEntries,
+            wednesdayEntries,
+            thursdayEntries,
+            fridayEntries,
+            saturdayEntries
         });
     }
 });
@@ -288,6 +354,7 @@ router.get('/schedule/:id/goals/daily', (req, res) => {
         });
     }
 });
+
 
 // Grab Commitments from HTML 
 // TODO - Modularize / despaghettify 
@@ -335,6 +402,43 @@ router.post('/schedule/:id/goals/daily', async (req, res) => {
         }
 
         // temp
+        res.redirect(`/schedule/review/${req.params.id}`);
+    }
+});
+
+// Schedule/entries/daily
+router.get('/schedule/:id/entries', async (req, res) => {
+    if(req.session.authorizedUser) {
+        // Pass all user foods for form select -- options
+        const allUsersFoods = await Food.findAll({ where: {owner: req.user.id} });
+
+
+        res.render('schedule/entries', {
+            scheduleID: req.params.id,
+            foods: allUsersFoods
+        });
+    }
+});
+
+// Schedule/entries/daily POST
+router.post('/schedule/:id/entries', async (req, res) => {
+    if(req.session.authorizedUser) {
+        const {
+            entryFood,
+            entryDay,
+            entryAmount
+        } = req.body;
+
+        const entry = new Entry({
+            food: entryFood,
+            entryAmount: entryAmount,
+            day: entryDay,
+            schedule: req.params.id
+        });
+
+        await entry.save();
+
+
         res.redirect(`/schedule/review/${req.params.id}`);
     }
 });

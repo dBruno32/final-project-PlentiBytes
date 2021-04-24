@@ -1,0 +1,40 @@
+<h1>Add an Entry | PlentiBytes</h1>
+
+
+<div class="middle-card-container">
+    <form action="/schedule/{{scheduleID}}/entries" method="post">
+        <label for="entryFood">Food:</label>
+        <br>
+        <select name="entryFood" id="">
+            {{#if foods}}
+                {{#each foods}}
+                    <!--POSTs description+id, so id can be removed for some queries and extracted fro others -->
+                    <option value="{{this.dataValues.description}}{{this.dataValues.id}}">{{this.dataValues.description}}</option>
+                {{/each}}
+            {{/if}}
+        </select>
+        <br><br>
+
+        <label for="entryDay">Day:</label>
+        <br>
+        <select name="entryDay" id="">
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select>
+        <br><br>
+
+
+        <label for="entryAmount">Amount (g):</label>
+        <br>
+        <input type="text" name="entryAmount" id="" required>
+        <br><br>
+
+        <input type="submit" value="Submit">
+
+    </form>   
+</div>
