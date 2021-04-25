@@ -31,6 +31,18 @@ router.get('/errors/temp', (req, res) => {
     res.render('errors/temp');
 });
 
+// NA - For however user accidentally gets to link / tries to get to link not authroized for
+router.get('/errors/not-authorized', (req, res) => {
+    res.render('errors/not-authorized', {
+        layout: 'login'
+    });
+});
+
+// For trying to post to goals w/o any entries
+router.get('/errors/incorrect-goal-commit', (req, res) => {
+    res.render('errors/incorrect-goal-commit');
+});
+
 // PROPOSAL
 router.get('/proposal', (req, res) => {
     res.render('proposal');
@@ -53,6 +65,8 @@ router.get('/home', (req, res) => {
             name: user.displayName,
             startDate: new Date(user.createdAt).toDateString()
         });
+    }  else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -128,6 +142,8 @@ router.get('/foods', async (req, res) => {
             proteins: proteinDenseFoods,
             sugars: sugarDenseFoods
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -139,6 +155,8 @@ router.get('/foods/add', (req, res) => {
         res.render('foods/add', {
             name: user.displayName
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -174,6 +192,8 @@ router.post('/foods/add', async (req, res) => {
         await food.save();
 
         res.redirect('/foods');
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -197,6 +217,8 @@ router.post('/schedule/create-new',  async (req, res) => {
         await schedule.save();
 
         res.redirect(`/schedule/review/${schedule.id}`);
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -225,6 +247,8 @@ router.get('/review-all-schedules', async (req, res) => {
 //            titles,
 //            schedulesIDs
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -336,6 +360,8 @@ router.get('/schedule/review/:id',  async (req, res) => {
             fridayEntries,
             saturdayEntries
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 /*
@@ -352,6 +378,8 @@ router.get('/schedule/:id/goals/daily', (req, res) => {
         res.render('schedule/goals/daily', {
             scheduleID: req.params.id
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -372,6 +400,11 @@ router.post('/schedule/:id/goals/daily', async (req, res) => {
         let days = [];
         let amounts = [];
         let types = [];
+
+        // if no commits -> direct them out
+        if(pendingCommitments.length == 0) {
+            return res.redirect('/errors/incorrect-goal-commit');
+        }
 
         // localeCompare() checks on strings to parse
         pendingCommitments.forEach(element => {
@@ -403,6 +436,8 @@ router.post('/schedule/:id/goals/daily', async (req, res) => {
 
         // temp
         res.redirect(`/schedule/review/${req.params.id}`);
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -417,6 +452,8 @@ router.get('/schedule/:id/entries', async (req, res) => {
             scheduleID: req.params.id,
             foods: allUsersFoods
         });
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 
@@ -440,6 +477,8 @@ router.post('/schedule/:id/entries', async (req, res) => {
 
 
         res.redirect(`/schedule/review/${req.params.id}`);
+    } else {
+        res.redirect('/errors/not-authorized');
     }
 });
 

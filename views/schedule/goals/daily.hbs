@@ -25,6 +25,8 @@
         </ul>
     </div>
 
+    <button onclick="clearAll();">Clear All</button>
+
     <form action="/schedule/{{scheduleID}}/goals/daily" method="post">
         <div id="commitments-list">
 
@@ -83,6 +85,16 @@
         modal.style.display = "block";
     }
 
+    // Clears out pending commits & their related hidden data
+    function clearAll() {
+        let list = document.querySelector('#commitments-list-items');
+        let commits = document.querySelector('#commitments-list');
+
+        list.innerHTML = '';
+        commits.innerHTML = '';
+
+    }
+
     function pushToCommitments() {
         i++;
         let amount = document.querySelector('#goal-amount').value; 
@@ -112,6 +124,8 @@
         commitmentType.name = 'type' + i;
         commitmentType.value = type ;
 
+        // commits -> get posted to backend
+        // list -> for view
         listItem.innerHTML = day + " Goal: " + amount + " " + type;
         commits.appendChild(commitmentDay);
         commits.appendChild(commitmentAmount);
