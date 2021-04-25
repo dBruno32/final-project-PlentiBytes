@@ -286,23 +286,17 @@ router.get('/schedule/review/:id',  async (req, res) => {
             goals.forEach(goal => {
                 if(goal.day.localeCompare("Sunday") == 0) {
                     sundayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                } 
-                if(goal.day.localeCompare("Monday") == 0) {
+                } else if(goal.day.localeCompare("Monday") == 0) {
                     mondayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                }
-                if(goal.day.localeCompare("Tuesday") == 0) {
+                } else if(goal.day.localeCompare("Tuesday") == 0) {
                     tuesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                } 
-                if(goal.day.localeCompare("Wednesday") == 0) {
+                } else if(goal.day.localeCompare("Wednesday") == 0) {
                     wednesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                }
-                if(goal.day.localeCompare("Thursday") == 0) {
+                } else if(goal.day.localeCompare("Thursday") == 0) {
                     thursdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                } 
-                if(goal.day.localeCompare("Friday") == 0) {
+                } else if(goal.day.localeCompare("Friday") == 0) {
                     fridayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
-                }
-                if(goal.day.localeCompare("Saturday") == 0) {
+                } else if(goal.day.localeCompare("Saturday") == 0) {
                     saturdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
                 }
             }); 
@@ -318,23 +312,17 @@ router.get('/schedule/review/:id',  async (req, res) => {
 
                 if(entry.day.localeCompare("Sunday") == 0) {
                     sundayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                } 
-                if(entry.day.localeCompare("Monday") == 0) {
+                } else if(entry.day.localeCompare("Monday") == 0) {
                     mondayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                }
-                if(entry.day.localeCompare("Tuesday") == 0) {
+                } else if(entry.day.localeCompare("Tuesday") == 0) {
                     tuesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                } 
-                if(entry.day.localeCompare("Wednesday") == 0) {
+                } else if(entry.day.localeCompare("Wednesday") == 0) {
                     wednesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                }
-                if(entry.day.localeCompare("Thursday") == 0) {
+                } else if(entry.day.localeCompare("Thursday") == 0) {
                     thursdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                } 
-                if(entry.day.localeCompare("Friday") == 0) {
+                } else if(entry.day.localeCompare("Friday") == 0) {
                     fridayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
-                }
-                if(entry.day.localeCompare("Saturday") == 0) {
+                } else if(entry.day.localeCompare("Saturday") == 0) {
                     saturdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
                 }
             });
@@ -414,11 +402,9 @@ router.post('/schedule/:id/goals/daily', async (req, res) => {
 
             if(string.localeCompare("day") == 0) {
                 days.push(element[1]);
-            } 
-            if(string.localeCompare("amount") == 0) {
+            } else if(string.localeCompare("amount") == 0) {
                 amounts.push(element[1]);
-            } 
-            if(string.localeCompare("type") == 0) {
+            } else if(string.localeCompare("type") == 0) {
                 types.push(element[1]);
             }
         });
