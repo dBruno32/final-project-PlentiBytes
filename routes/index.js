@@ -25,6 +25,8 @@ const Entry = require('../models/Entry');
 const Food = require('../models/Food');
 const Schedule = require('../models/Schedule');
 
+const Validator = require('../utils/validator');
+
 
 // TEMP - For pages not yet set up
 router.get('/errors/temp', (req, res) => {
@@ -42,6 +44,12 @@ router.get('/errors/not-authorized', (req, res) => {
 router.get('/errors/incorrect-goal-commit', (req, res) => {
     res.render('errors/incorrect-goal-commit');
 });
+
+// For trying to post to goals w/ non numbers
+router.get('/errors/invalid-form-input', (req, res) => {
+    res.render('errors/invalid-form-input');
+});
+
 
 // PROPOSAL
 router.get('/proposal', (req, res) => {
@@ -75,7 +83,7 @@ router.get('/foods', async (req, res) => {
     if(req.session.authorizedUser) {
         const user = req.session.authorizedUser;
     
-        // *TODO* []: !!!!FORM VALIDATIONS!!!!
+        // *TODO* [-]: !!!!FORM VALIDATIONS!!!!
         // TODO [X]: QUery all user's (by ID) foods
         // TODO [X-Needs More Testing]: Categorize foods by their values    
         // TODO [X]: Parse into separate arrays
@@ -164,9 +172,11 @@ router.get('/foods/add', (req, res) => {
 router.post('/foods/add', async (req, res) => {
     
     if(req.session.authorizedUser) {
+        // For Validations
+
         const user = req.session.authorizedUser;
 
-        const {
+        var {
             foodDescription,
             servingSize,
             calorieServing,
@@ -176,6 +186,24 @@ router.post('/foods/add', async (req, res) => {
             proteinServing,
             sugarServing
         } = req.body;
+
+        // Data coming in as strings?
+        servingSize = parseInt(servingSize, 10);
+        calorieServing = parseInt(calorieServing, 10);
+        carbohydrateServing = parseInt(carbohydrateServing, 10);
+        fatServing = parseInt(fatServing, 10);
+        fiberServing = parseInt(fiberServing, 10);
+        proteinServing = parseInt(proteinServing, 10);
+        sugarServing = parseInt(sugarServing, 10);
+
+
+        // Validations on array including the specific food's serving inputs
+        const v = new Validator();      
+        const toTestNumbers = [servingSize, calorieServing, fatServing, fiberServing, proteinServing, sugarServing];
+
+        if(!v.isNumberAll(toTestNumbers)) {
+            return res.redirect('/errors/invalid-form-input');
+        }
 
         const food = new Food({
             owner: req.user.id,
@@ -409,6 +437,14 @@ router.post('/schedule/:id/goals/daily', async (req, res) => {
             }
         });
 
+        // Validations on array including the the goalAMounts from each pendingCommit
+        // TODO validatee on client for extra protection against errors
+        const v = new Validator();      
+
+        if(!v.isNumberAll(amounts)) {
+            return res.redirect('/errors/invalid-form-input');
+        }
+
         // new Goal rows in DB
         for (let index = 0; index < days.length; index++) {
             goal = new Goal({
@@ -451,6 +487,12 @@ router.post('/schedule/:id/entries', async (req, res) => {
             entryDay,
             entryAmount
         } = req.body;
+
+        // Validations on individual entryAmount
+        const v = new Validator();  
+        if(!v.isNumber(entryAmount)) {
+            return res.redirect('/errors/invalid-form-input');
+        }
 
         const entry = new Entry({
             food: entryFood,

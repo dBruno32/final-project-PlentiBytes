@@ -56,7 +56,7 @@
             <label for="amountOfGoal">Amount:</label>
                 <input type="text" id="goal-amount" required>
             <br>
-            <input type="button" onclick="pushToCommitments();" value="Submit">
+            <input type="button" onclick="pushToCommitments();" value="Commit">
         </form>
     </div>
 </div>
@@ -97,11 +97,17 @@
 
     function pushToCommitments() {
         i++;
-        let amount = document.querySelector('#goal-amount').value; 
+        let amount = parseInt(document.querySelector('#goal-amount').value, 10); 
         let type = document.querySelector('#goal-modal-title').childNodes[0].innerHTML;
         let day = document.querySelector('#goal-day').value; 
         let list = document.querySelector('#commitments-list-items');
         let commits = document.querySelector('#commitments-list');
+
+        // Validation of pre-psot form
+        if(isNaN(amount)) {
+            alert("Please make sure to enter a number for amount...");
+            return;
+        }
 
         let listItem = document.createElement('li');
         listItem.style.listStyle = 'inside';
@@ -110,19 +116,20 @@
         let commitmentDay = document.createElement('input');
         commitmentDay.type = "hidden"
         commitmentDay.name = 'day' + i;
-        commitmentDay.value = day ;
+        commitmentDay.value = day;
         
         // Amount
         let commitmentAmount = document.createElement('input');
         commitmentAmount.type = "hidden"
         commitmentAmount.name = 'amount' + i;
-        commitmentAmount.value = amount ;
+        commitmentAmount.value = amount;
 
         // Food
         let commitmentType = document.createElement('input');
         commitmentType.type = "hidden"
         commitmentType.name = 'type' + i;
-        commitmentType.value = type ;
+        commitmentType.value = type;
+
 
         // commits -> get posted to backend
         // list -> for view
