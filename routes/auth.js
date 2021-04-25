@@ -32,9 +32,8 @@ router.post('/login', async (req, res) => {
             const userID = existingUser.id;
             // Passport function call to login the user // assigns user to req.user
             req.login(existingUser, function(err) {
-                console.log(req.session);
                 if(err) {
-                    console.log("Not Authorized");
+                    res.redirect('/auth/login');
                 }
             });
 
@@ -97,7 +96,8 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-    req.session.destroy();
+    // Trying passport's req.logout() to fix session id issue & double login
+    req.logout();
     res.redirect('/');
 });
 
