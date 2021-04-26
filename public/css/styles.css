@@ -256,7 +256,9 @@
             margin-right: 7%;
         }
 
-        p, h1, h2, h3, h4, h5 {
+        p, h1, h2, h3, h4, h5, tr, td, th {
+            width: 75%;
+            display: block;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

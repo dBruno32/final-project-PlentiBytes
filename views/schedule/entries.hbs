@@ -1,40 +1,128 @@
 <h1>Add an Entry | PlentiBytes</h1>
 
 
-<div class="middle-card-container">
-    <form action="/schedule/{{scheduleID}}/entries" method="post">
-        <label for="entryFood">Food:</label>
-        <br>
-        <select name="entryFood" id="">
-            {{#if foods}}
-                {{#each foods}}
-                    <!--POSTs description+id, so id can be removed for some queries and extracted fro others -->
-                    <option value="{{this.dataValues.description}}{{this.dataValues.id}}">{{this.dataValues.description}}</option>
-                {{/each}}
-            {{/if}}
-        </select>
+<div class="middle-card-container fifty-fifty-split-grid">
+    <div class="middle-card-container left-fifty-split-grid">
+        <form action="/schedule/{{scheduleID}}/entries" method="post">
+            <label for="entryFood">Food:</label>
+            <br>
+            <select name="entryFood" id="food-selector" onchange="renderFoodDetails();" required="required">
+                {{#if foods}}
+                    {{#each foods}}
+                        <!--POSTs description+id, so id can be removed for some queries and extracted fro others -->
+                        <option value="{{this.dataValues.description}}{{this.dataValues.id}}">{{this.dataValues.description}}</option>
+                    {{/each}}
+                {{/if}}
+            </select>
+            <br><br>
+
+            <label for="entryDay">Day:</label>
+            <br>
+            <select name="entryDay" id="">
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+            </select>
+            <br><br>
+
+
+            <label for="entryAmount">Amount (g):</label>
+            <br>
+            <input type="text" name="entryAmount" id="entry-amount-input" onchange="renderFoodDetails();" required>
+            <br><br>
+
+            <input type="submit" value="Submit">
+
+        </form>      
+    </div>
+
+    <div class="middle-card-container right-split-grid">
+        <h2 class="centered-title">Your Entry</h2>
         <br><br>
 
-        <label for="entryDay">Day:</label>
-        <br>
-        <select name="entryDay" id="">
-            <option value="Sunday">Sunday</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-        </select>
-        <br><br>
+        <table style="width:100%">
+            <tr>
+                <td><p>Perecentage of Set Serving: </p></td>
+                <td><p id="serving-percentage">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Calories: </p></td>
+                <td><p id="calorie-count">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Carbohydrates: </p></td>
+                <td><p id="carbohydrate-count">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Fat: </p></td>
+                <td><p id="fat-count">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Fiber: </p></td>
+                <td><p id="fiber-count">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Protein: </p></td>
+                <td><p id="protein-count">...</p></td>
+            </tr>
+            <tr>
+                <td><p>Sugar: </p></td>
+                <td><p id="sugar-count">...</p></td>
+            </tr>
+        </table>
+    </div> 
 
-
-        <label for="entryAmount">Amount (g):</label>
-        <br>
-        <input type="text" name="entryAmount" id="" required>
-        <br><br>
-
-        <input type="submit" value="Submit">
-
-    </form>   
 </div>
+
+<script>
+    // Attempting AJAX & live updating w/o refreshing
+    const foodSelector = document.querySelector('#food-selector');
+    const amountInput = document.querySelector('#entry-amount-input');
+    
+    // Document Elements
+    var servingPercentage = document.querySelector('#serving-percentage');
+    var calories = document.querySelector('#calorie-count');
+    var carbohydrates = document.querySelector('#carbohydrate-count');
+    var fats = document.querySelector('#fat-count');
+    var fibers = document.querySelector('#fiber-count');
+    var proteins = document.querySelector('#protein-count');
+    var sugars = document.querySelector('#sugar-count');
+
+    // SHOULD: Update the details of the right div
+    function renderFoodDetails() {
+        const selectedFood = foodSelector.value;
+        const amount = amountInput.value;
+
+        // regex for digits -> Used to get ID from food
+        var foodID = selectedFood.match(/\d/g);
+        // Joins array of return to get the digit and then parsesInt
+        foodID = parseInt(foodID.join(""));
+
+        // Trying out JQUERY
+        // Renders data from Server onto screen dynamically onchange of input fields + selections
+        $(function (){
+            $.ajax({
+                type: 'GET',
+                url: `/entries/food/`+foodID, 
+                success: function(food) {
+                    // Finds Ratio of entered food to the servign size inputted in system at add food screen
+                    const servingRatio = amount / food.servingSize;
+                    servingPercentage.innerHTML = parseInt(servingRatio * 100) + "%";
+
+                    // Multiply ratio by serving factors & dynamically render
+                    calories.innerHTML = parseInt(servingRatio * food.servingCalorie);
+                    carbohydrates.innerHTML = parseInt(servingRatio * food.servingCarbohydrate);
+                    fats.innerHTML = parseInt(servingRatio * food.servingFat);
+                    fibers.innerHTML = parseInt(servingRatio * food.servingFiber);
+                    proteins.innerHTML = parseInt(servingRatio * food.servingProtein);
+                    sugars.innerHTML = parseInt(servingRatio * food.servingSugar);
+                }
+            });
+        });
+    }
+
+</script>

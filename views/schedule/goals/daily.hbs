@@ -92,11 +92,17 @@
 
         list.innerHTML = '';
         commits.innerHTML = '';
-
     }
+
 
     function pushToCommitments() {
         i++;
+        // Ensures method of removing final string does not mess with data on server side
+        // TODO - accomodate higher number commits
+        if (i > 9) {
+            alert('Please only enter 9 commits at a time');
+            return;
+        }
         let amount = parseInt(document.querySelector('#goal-amount').value, 10); 
         let type = document.querySelector('#goal-modal-title').childNodes[0].innerHTML;
         let day = document.querySelector('#goal-day').value; 

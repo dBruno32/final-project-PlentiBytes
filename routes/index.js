@@ -130,6 +130,9 @@ router.get('/foods', async (req, res) => {
                 } else if(((carbDifference / carb) > (fiber/carb)) && ((carbDifference / carb) > (sugar / carb))) {
                 // PRIO - Carb
                     carbohydrateDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+                } else {
+                    // DEFAULT - carb PRIO
+                    carbohydrateDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
                 }
 
             } else if(((fat / totalGram) > (carb/totalGram)) && ((fat/totalGram) > (protein/totalGram))) {
@@ -139,6 +142,21 @@ router.get('/foods', async (req, res) => {
             } else if(((protein / totalGram) > (fat/totalGram)) && ((protein/totalGram) > (carb/totalGram))) {
                 // PRIO - Protein
                 proteinDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+            } else {
+                // If No %s are greater / then check value
+                if(fat > carb && fat > protein ) {
+                    // PRIO - FAT
+                    fatDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+                } else if(carb > fat && carb > protein) {
+                    // PRIO - CARB
+                    carbohydrateDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+                } else if(protein > carb && protein > fat) {
+                    // PRIO - protein
+                    proteinDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);
+                } else {
+                    // Just Default to CARB [MAybe Change]
+                    carbohydrateDenseFoods.push(`${food.description} | ${food.servingCalorie} calories per ${food.servingSize}g serving.`);                
+                }
             }
         });
 
@@ -313,19 +331,19 @@ router.get('/schedule/review/:id',  async (req, res) => {
         if(goals) {
             goals.forEach(goal => {
                 if(goal.day.localeCompare("Sunday") == 0) {
-                    sundayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    sundayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Monday") == 0) {
-                    mondayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    mondayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Tuesday") == 0) {
-                    tuesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    tuesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Wednesday") == 0) {
-                    wednesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    wednesdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Thursday") == 0) {
-                    thursdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    thursdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Friday") == 0) {
-                    fridayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    fridayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 } else if(goal.day.localeCompare("Saturday") == 0) {
-                    saturdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}`);
+                    saturdayGoals.push(`Goal: ${goal.goalType} | ${goal.goalAmount}g`);
                 }
             }); 
         }
@@ -339,19 +357,19 @@ router.get('/schedule/review/:id',  async (req, res) => {
                 let foodString = entry.food.substring(0, entry.food.length - 1);
 
                 if(entry.day.localeCompare("Sunday") == 0) {
-                    sundayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    sundayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Monday") == 0) {
-                    mondayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    mondayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Tuesday") == 0) {
-                    tuesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    tuesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Wednesday") == 0) {
-                    wednesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    wednesdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Thursday") == 0) {
-                    thursdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    thursdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Friday") == 0) {
-                    fridayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    fridayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 } else if(entry.day.localeCompare("Saturday") == 0) {
-                    saturdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}`);
+                    saturdayEntries.push(`Entry: ${foodString} | ${entry.entryAmount}g`);
                 }
             });
         }
@@ -488,6 +506,12 @@ router.post('/schedule/:id/entries', async (req, res) => {
             entryAmount
         } = req.body;
 
+        // remove numbers from entries
+        // regex for removing digits -> Used to get food description
+        console.log("ONE: ", entryFood);
+        const food = entryFood.replace(/\d/, '');
+        console.log("TWO: ", food);
+
         // Validations on individual entryAmount
         const v = new Validator();  
         if(!v.isNumber(entryAmount)) {
@@ -495,7 +519,7 @@ router.post('/schedule/:id/entries', async (req, res) => {
         }
 
         const entry = new Entry({
-            food: entryFood,
+            food: food,
             entryAmount: entryAmount,
             day: entryDay,
             schedule: req.params.id
@@ -509,5 +533,11 @@ router.post('/schedule/:id/entries', async (req, res) => {
         res.redirect('/errors/not-authorized');
     }
 });
+
+// Testing Out
+router.get('/entries/food/:id', async (req, res) => {
+    const food = await Food.findOne({ where: {id: req.params.id} });
+    res.send(food);
+}) 
 
 module.exports = router;

@@ -98,6 +98,8 @@ router.post('/register', async (req, res) => {
 router.get('/logout', (req, res) => {
     // Trying passport's req.logout() to fix session id issue & double login
     req.logout();
+    // Adding session.destory() back -> working on fix for double login
+    req.session.destroy();
     res.redirect('/');
 });
 

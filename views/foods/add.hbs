@@ -4,7 +4,8 @@
     <form action="/foods/add" method="POST" name="addFoodForm">
         <label for="foodDescription">Food Description</label>
             <br>
-        <input type="text" name="foodDescription" required>
+        <!-- Regex -> Must be Letters -->
+        <input type="text" name="foodDescription" pattern="[A-Za-z]*" required="required">
             <br><br>
 
         <label for="servingSize">Serving Size in (g)</label>
